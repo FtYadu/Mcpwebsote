@@ -1,0 +1,30 @@
+version: '3.9'
+services:
+  app:
+    build: .
+    ports:
+      - '8000:8000'
+    env_file:
+      - .env
+    volumes:
+      - ./:/app
+    depends_on:
+      - redis
+      - postgres
+  redis:
+    image: redis:7-alpine
+    ports:
+      - '6379:6379'
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: digen
+      POSTGRES_USER: digen
+      POSTGRES_PASSWORD: digen
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

@@ -1,10 +1,16 @@
-.PHONY: install run test
+.PHONY: install bootstrap run test lint
 
 install:
 	python -m pip install -r requirements.txt
 
+bootstrap:
+	./scripts/bootstrap_env.sh
+
 run:
-	cd digen-mcp && python -m app.main
+	python -m app.main --http
 
 test:
-	cd digen-mcp && pytest -q
+	pytest -q
+
+lint:
+	ruff check app tests

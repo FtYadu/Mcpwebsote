@@ -1,4 +1,4 @@
-"""Shared job models."""
+"""Shared job and workflow models."""
 
 from __future__ import annotations
 
@@ -36,3 +36,16 @@ class JobRecord(BaseModel):
     preview_url: HttpUrl | None = None
     result_url: HttpUrl | None = None
     error: ErrorDetail | None = None
+
+
+class HealthStatus(BaseModel):
+    """Structured health response for dependency introspection."""
+
+    model_config = ConfigDict(extra='forbid')
+
+    status: str
+    provider: str
+    database: dict[str, Any]
+    redis: dict[str, Any]
+    tools: dict[str, Any]
+    queue: dict[str, Any]
