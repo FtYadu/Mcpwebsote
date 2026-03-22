@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from enum import Enum
+from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field, HttpUrl, field_validator
 
@@ -97,3 +98,52 @@ class BoostFpsInput(BaseInputModel):
 
 class JobLookupInput(BaseInputModel):
     job_id: str = Field(min_length=1)
+
+
+class SummarizeTextInput(BaseInputModel):
+    text: str = Field(min_length=1, max_length=20000)
+    max_sentences: int = Field(default=3, ge=1, le=10)
+
+
+class SentimentAnalysisInput(BaseInputModel):
+    text: str = Field(min_length=1, max_length=20000)
+
+
+class DocumentToTextInput(BaseInputModel):
+    content: str = Field(min_length=1, max_length=50000)
+    content_type: str = Field(default='text/plain')
+
+
+class TextToSpeechInput(BaseInputModel):
+    text: str = Field(min_length=1, max_length=5000)
+    voice: str = Field(default='alloy')
+    format: str = Field(default='mp3')
+
+
+class TranscriptionInput(BaseInputModel):
+    audio_url: HttpUrl
+    language: str | None = None
+
+
+class ToolExecutionRequest(BaseInputModel):
+    tool: str = Field(min_length=1)
+    parameters: dict[str, Any] = Field(default_factory=dict)
+
+
+class WorkflowTaskInput(BaseInputModel):
+    id: int = Field(ge=1)
+    tool: str = Field(min_length=1)
+    parameters: dict[str, Any] = Field(default_factory=dict)
+    depends_on: list[int] = Field(default_factory=list)
+
+
+class WorkflowSubmissionInput(BaseInputModel):
+    tasks: list[WorkflowTaskInput] = Field(min_length=1)
+
+    @field_validator('tasks')
+    @classmethod
+    def _validate_unique_ids(cls, value: list[WorkflowTaskInput]) -> list[WorkflowTaskInput]:
+        task_ids = [task.id for task in value]
+        if len(task_ids) != len(set(task_ids)):
+            raise ValueError('Each workflow task id must be unique.')
+        return value

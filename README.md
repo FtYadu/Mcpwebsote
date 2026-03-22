@@ -1,5 +1,13 @@
 # Mcpwebsote
 
-This repository now contains the `digen-mcp` project in `digen-mcp/`.
+This repository contains the production-ready `digen-mcp` MCP server in `digen-mcp/`.
 
-See `digen-mcp/README.md` for setup, architecture, and usage details.
+## Quick start
+```bash
+cd digen-mcp
+./scripts/bootstrap_env.sh
+python -m pip install -r requirements.txt
+python -m app.main --http
+```
+
+See [`digen-mcp/README.md`](digen-mcp/README.md) for installation, architecture, API examples, Docker Compose, and extension guidance.

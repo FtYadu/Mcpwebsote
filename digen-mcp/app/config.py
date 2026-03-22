@@ -21,6 +21,7 @@ class Settings(BaseSettings):
     playwright_username: str | None = Field(default=None)
     playwright_password: str | None = Field(default=None)
     db_path: str = Field(default='./data/digen.db')
+    database_url: str | None = Field(default=None)
     temp_dir: str = Field(default='./tmp')
     redis_url: str | None = Field(default=None)
     request_timeout_seconds: float = Field(default=30.0)
@@ -29,6 +30,8 @@ class Settings(BaseSettings):
     result_url_ttl_seconds: int = Field(default=3600)
     http_host: str = Field(default='127.0.0.1')
     http_port: int = Field(default=8000)
+    public_base_url: str = Field(default='http://127.0.0.1:8000')
+    queue_backend: str = Field(default='inline')
 
     @property
     def db_file(self) -> Path:
