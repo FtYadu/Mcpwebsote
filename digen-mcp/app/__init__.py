@@ -1,0 +1,1 @@
+"""digen-mcp application package."""
